@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAccessToken, getRefreshToken, refreshAccessToken } from '@/lib/api';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Helper to decode JWT and check expiry
 function isTokenExpired(token: string | null): boolean {
@@ -57,9 +58,10 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-gray-600">Loading...</div>
-      </div>
+      <main className="p-8 space-y-4">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-96 mt-4" />
+      </main>
     );
   }
 

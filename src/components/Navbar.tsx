@@ -90,12 +90,13 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700 hover:text-blue-600"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -121,12 +122,13 @@ export default function Navbar() {
                 <Link href="/profile" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                   Profile
                 </Link>
-                <button
+                <Button
+                  variant="ghost"
                   onClick={handleLogout}
-                  className="block w-full text-left px-3 py-2 text-red-600 hover:bg-gray-100 rounded-md"
+                  className="justify-start text-red-600 hover:text-red-700 hover:bg-red-50 w-full"
                 >
                   Logout
-                </button>
+                </Button>
               </>
             ) : (
               <>
