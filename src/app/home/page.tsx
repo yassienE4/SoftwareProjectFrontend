@@ -38,14 +38,14 @@ export default function HomePage() {
           await refreshAccessToken();
           accessToken = getAccessToken();
         } catch (error) {
-          router.push('/auth');
+          router.push('/login');
           return;
         }
       }
       
-      // If no valid token, redirect to auth
+      // If no valid token, redirect to login
       if (!accessToken || isTokenExpired(accessToken)) {
-        router.push('/auth');
+        router.push('/login');
         return;
       }
       

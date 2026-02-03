@@ -19,7 +19,7 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
     const accessToken = getAccessToken();
     
     if (!accessToken) {
-      router.push('/auth');
+      router.push('/login');
       return;
     }
 
@@ -33,7 +33,7 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
           return;
         }
       } else {
-        router.push('/auth');
+        router.push('/login');
         return;
       }
     }

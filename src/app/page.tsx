@@ -19,7 +19,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button size="lg" asChild>
-              <Link href="/auth" className="gap-2">
+              <Link href="/register" className="gap-2">
                 Get Started <ArrowRight size={20} />
               </Link>
             </Button>
@@ -103,7 +103,7 @@ export default function LandingPage() {
             Join the community of developers building amazing projects.
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/auth">Create Your Account Now</Link>
+            <Link href="/register">Create Your Account Now</Link>
           </Button>
         </div>
       </section>

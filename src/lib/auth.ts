@@ -63,7 +63,7 @@ export async function authenticatedFetch(
     } catch (error) {
       // Refresh failed, redirect to login
       clearTokens();
-      window.location.href = '/auth';
+      window.location.href = '/login';
       throw error;
     }
   }

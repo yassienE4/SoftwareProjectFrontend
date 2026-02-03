@@ -192,7 +192,7 @@ export async function authenticatedFetch(
 			// Refresh failed, clear tokens and redirect to login
 			logout();
 			if (typeof window !== 'undefined') {
-				window.location.href = '/auth';
+				window.location.href = '/login';
 			}
 			throw error;
 		}

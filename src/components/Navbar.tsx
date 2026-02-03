@@ -79,10 +79,10 @@ export default function Navbar() {
             ) : (
               <>
                 <Button variant="outline" asChild>
-                  <Link href="/auth">Login</Link>
+                  <Link href="/login">Login</Link>
                 </Button>
                 <Button asChild>
-                  <Link href="/auth">Sign Up</Link>
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </>
             )}
@@ -130,10 +130,10 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/auth" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                <Link href="/login" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                   Login
                 </Link>
-                <Link href="/auth" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                <Link href="/register" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                   Sign Up
                 </Link>
               </>
