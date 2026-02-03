@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Menu, X } from 'lucide-react';
+import { logout } from '@/lib/api';
 
 export default function Navbar() {
   const [user, setUser] = useState(null);
@@ -24,7 +25,7 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    logout();
     setUser(null);
     window.location.href = '/';
   };

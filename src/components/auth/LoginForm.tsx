@@ -26,11 +26,11 @@ export default function LoginForm() {
       
       if (response.success) {
         toast.success('Login successful!');
-        // Store user data if needed
+        // Store user data
         localStorage.setItem('user', JSON.stringify(response.data));
         
         // Redirect to dashboard or home
-        window.location.href = '/dashboard';
+        window.location.href = '/home';
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Login failed';

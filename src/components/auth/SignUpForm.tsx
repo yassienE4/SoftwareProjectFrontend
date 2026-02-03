@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { signup } from '@/lib/api';
+import { signup, UserRole } from '@/lib/api';
 
 interface SignUpFormProps {
   onSuccess?: () => void;
@@ -17,7 +17,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
     name: '',
     password: '',
     confirmPassword: '',
-    role: 'user',
+    role: UserRole.Student,
   });
   const [loading, setLoading] = useState(false);
 
@@ -61,7 +61,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
           name: '',
           password: '',
           confirmPassword: '',
-          role: 'user',
+          role: UserRole.Student,
         });
         onSuccess?.();
       }
@@ -141,9 +141,9 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
           disabled={loading}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-          <option value="moderator">Moderator</option>
+          <option value={UserRole.Student}>{UserRole.Student}</option>
+          <option value={UserRole.Instructor}>{UserRole.Instructor}</option>
+          <option value={UserRole.Admin}>{UserRole.Admin}</option>
         </select>
       </div>
 
