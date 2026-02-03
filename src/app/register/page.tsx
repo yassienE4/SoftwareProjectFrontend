@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown } from 'lucide-react';
 import { signup, UserRole } from '@/lib/api';
 
 export default function RegisterPage() {
@@ -22,9 +29,14 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setError('');
+  };
+
+  const handleRoleChange = (role: string) => {
+    setFormData((prev) => ({ ...prev, role }));
     setError('');
   };
 
@@ -154,18 +166,29 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="role">Role</Label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                disabled={isLoading}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value={UserRole.Student}>{UserRole.Student}</option>
-                <option value={UserRole.Instructor}>{UserRole.Instructor}</option>
-                <option value={UserRole.Admin}>{UserRole.Admin}</option>
-              </select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between"
+                    disabled={isLoading}
+                  >
+                    {formData.role}
+                    <ChevronDown className="h-4 w-4 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Student)}>
+                    {UserRole.Student}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Instructor)}>
+                    {UserRole.Instructor}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Admin)}>
+                    {UserRole.Admin}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <Button
