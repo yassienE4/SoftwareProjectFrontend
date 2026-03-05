@@ -16,6 +16,29 @@ export enum UserRole {
 	Student = 'Student',
 }
 
+export interface User {
+	id: string;
+	email: string;
+	name: string;
+	role: UserRole;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface CreateUserRequest {
+	email: string;
+	name: string;
+	password: string;
+	role?: UserRole;
+}
+
+export interface UpdateUserRequest {
+	name?: string;
+	email?: string;
+	role?: UserRole;
+	password?: string;
+}
+
 interface LoginRequest {
 	email: string;
 	password: string;
@@ -201,3 +224,99 @@ export async function authenticatedFetch(
 	return response;
 }
 
+
+// ============================================
+// User Management API Functions
+// ============================================
+
+/**
+ * Get all users (Admin only)
+ * @param role - Optional role filter
+ */
+export async function getUsers(role?: UserRole): Promise<User[]> {
+	const url = role 
+		? `${BASE_URL}/users?role=${role}`
+		: `${BASE_URL}/users`;
+	
+	const response = await authenticatedFetch(url);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Failed to fetch users');
+	}
+
+	const result = await response.json();
+	return result.data;
+}
+
+/**
+ * Get user by ID (Admin or the user themselves)
+ * @param id - User ID
+ */
+export async function getUserById(id: string): Promise<User> {
+	const response = await authenticatedFetch(`${BASE_URL}/users/${id}`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Failed to fetch user');
+	}
+
+	const result = await response.json();
+	return result.data;
+}
+
+/**
+ * Create a new user (Admin only)
+ * @param data - User creation data
+ */
+export async function createUser(data: CreateUserRequest): Promise<User> {
+	const response = await authenticatedFetch(`${BASE_URL}/users`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Failed to create user');
+	}
+
+	const result = await response.json();
+	return result.data;
+}
+
+/**
+ * Update user (Admin only)
+ * @param id - User ID
+ * @param data - Update data
+ */
+export async function updateUser(id: string, data: UpdateUserRequest): Promise<User> {
+	const response = await authenticatedFetch(`${BASE_URL}/users/${id}`, {
+		method: 'PATCH',
+		body: JSON.stringify(data),
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Failed to update user');
+	}
+
+	const result = await response.json();
+	return result.data;
+}
+
+/**
+ * Delete user (Admin only)
+ * @param id - User ID
+ */
+export async function deleteUser(id: string): Promise<{ message: string }> {
+	const response = await authenticatedFetch(`${BASE_URL}/users/${id}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.error || 'Failed to delete user');
+	}
+
+	return response.json();
+}

@@ -45,9 +45,10 @@ export default function LoginPage() {
         // Store user data
         localStorage.setItem('user', JSON.stringify(response.data));
 
-        // Redirect to home
+        // Redirect based on role
+        const redirectUrl = response.data.role === 'Admin' ? '/admin/users' : '/home';
         setTimeout(() => {
-          window.location.href = '/home';
+          window.location.href = redirectUrl;
         }, 500);
       }
     } catch (error) {
