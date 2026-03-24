@@ -16,9 +16,17 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { signup, UserRole } from '@/lib/api';
 
+type RegisterFormState = {
+  email: string;
+  name: string;
+  password: string;
+  confirmPassword: string;
+  role: UserRole;
+};
+
 export default function RegisterPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterFormState>({
     email: '',
     name: '',
     password: '',
@@ -35,7 +43,7 @@ export default function RegisterPage() {
     setError('');
   };
 
-  const handleRoleChange = (role: string) => {
+  const handleRoleChange = (role: UserRole) => {
     setFormData((prev) => ({ ...prev, role }));
     setError('');
   };

@@ -16,11 +16,66 @@ export enum UserRole {
 	Student = 'Student',
 }
 
+export enum ExamStatus {
+	Draft = 'Draft',
+	Published = 'Published',
+	Closed = 'Closed',
+}
+
+export enum QuestionType {
+	MCQ = 'MCQ',
+	TrueFalse = 'TrueFalse',
+}
+
+export enum AttemptStatus {
+	InProgress = 'InProgress',
+	Submitted = 'Submitted',
+}
+
 export interface User {
 	id: string;
 	email: string;
 	name: string;
 	role: UserRole;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface Exam {
+	id: string;
+	title: string;
+	description: string;
+	instructorId: string;
+	durationMinutes: number;
+	availabilityStart: string | null;
+	availabilityEnd: string | null;
+	status: ExamStatus;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface Question {
+	id: string;
+	examId: string;
+	order: number;
+	type: QuestionType;
+	questionText: string;
+	options: string[];
+	correctAnswer: string;
+	points: number;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface ExamAttempt {
+	id: string;
+	examId: string;
+	studentId: string;
+	status: AttemptStatus;
+	answers: Record<string, string>;
+	score: number | null;
+	startedAt: string | null;
+	submittedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -37,6 +92,48 @@ export interface UpdateUserRequest {
 	email?: string;
 	role?: UserRole;
 	password?: string;
+}
+
+export interface CreateExamRequest {
+	title: string;
+	description: string;
+	durationMinutes: number;
+	availabilityStart?: string | null;
+	availabilityEnd?: string | null;
+	status?: ExamStatus;
+	instructorId?: string;
+}
+
+export interface UpdateExamRequest {
+	title?: string;
+	description?: string;
+	durationMinutes?: number;
+	availabilityStart?: string | null;
+	availabilityEnd?: string | null;
+	status?: ExamStatus;
+	instructorId?: string;
+}
+
+export interface CreateQuestionRequest {
+	order: number;
+	type: QuestionType;
+	questionText: string;
+	options: string[];
+	correctAnswer: string;
+	points: number;
+}
+
+export interface UpdateQuestionRequest {
+	order?: number;
+	type?: QuestionType;
+	questionText?: string;
+	options?: string[];
+	correctAnswer?: string;
+	points?: number;
+}
+
+export interface SubmitAttemptRequest {
+	answers: Record<string, string>;
 }
 
 interface LoginRequest {
@@ -61,6 +158,24 @@ interface AuthResponse {
 	};
 	accessToken: string;
 	refreshToken: string;
+}
+
+async function readErrorMessage(response: Response, fallback: string): Promise<string> {
+	try {
+		const payload = await response.json();
+		return payload.error || fallback;
+	} catch {
+		return fallback;
+	}
+}
+
+async function readData<T>(response: Response, fallback: string): Promise<T> {
+	if (!response.ok) {
+		throw new Error(await readErrorMessage(response, fallback));
+	}
+
+	const result = await response.json();
+	return result.data as T;
 }
 
 export async function login(credentials: LoginRequest): Promise<AuthResponse> {
@@ -176,6 +291,19 @@ export function logout(): void {
 	localStorage.removeItem('user');
 }
 
+export function getCurrentUser(): User | null {
+	if (typeof window === 'undefined') return null;
+
+	const userData = localStorage.getItem('user');
+	if (!userData) return null;
+
+	try {
+		return JSON.parse(userData) as User;
+	} catch {
+		return null;
+	}
+}
+
 /**
  * Make an authenticated API request with automatic token refresh on 401/403
  */
@@ -222,6 +350,121 @@ export async function authenticatedFetch(
 	}
 
 	return response;
+}
+
+// ============================================
+// Exam Management API Functions
+// ============================================
+
+export async function getExams(): Promise<Exam[]> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams`);
+	return readData<Exam[]>(response, 'Failed to fetch exams');
+}
+
+export async function getExamById(id: string): Promise<Exam> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${id}`);
+	return readData<Exam>(response, 'Failed to fetch exam');
+}
+
+export async function createExam(data: CreateExamRequest): Promise<Exam> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	return readData<Exam>(response, 'Failed to create exam');
+}
+
+export async function updateExam(id: string, data: UpdateExamRequest): Promise<Exam> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${id}`, {
+		method: 'PATCH',
+		body: JSON.stringify(data),
+	});
+
+	return readData<Exam>(response, 'Failed to update exam');
+}
+
+export async function deleteExam(id: string): Promise<{ message: string }> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${id}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) {
+		throw new Error(await readErrorMessage(response, 'Failed to delete exam'));
+	}
+
+	return response.json();
+}
+
+export async function getExamQuestions(examId: string): Promise<Question[]> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${examId}/questions`);
+	return readData<Question[]>(response, 'Failed to fetch questions');
+}
+
+export async function createQuestion(
+	examId: string,
+	data: CreateQuestionRequest
+): Promise<Question> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${examId}/questions`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	return readData<Question>(response, 'Failed to create question');
+}
+
+export async function updateQuestion(
+	examId: string,
+	questionId: string,
+	data: UpdateQuestionRequest
+): Promise<Question> {
+	const response = await authenticatedFetch(
+		`${BASE_URL}/exams/${examId}/questions/${questionId}`,
+		{
+			method: 'PATCH',
+			body: JSON.stringify(data),
+		}
+	);
+
+	return readData<Question>(response, 'Failed to update question');
+}
+
+export async function deleteQuestion(
+	examId: string,
+	questionId: string
+): Promise<{ message: string }> {
+	const response = await authenticatedFetch(
+		`${BASE_URL}/exams/${examId}/questions/${questionId}`,
+		{
+			method: 'DELETE',
+		}
+	);
+
+	if (!response.ok) {
+		throw new Error(await readErrorMessage(response, 'Failed to delete question'));
+	}
+
+	return response.json();
+}
+
+export async function startExamAttempt(examId: string): Promise<ExamAttempt> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${examId}/start`, {
+		method: 'POST',
+	});
+
+	return readData<ExamAttempt>(response, 'Failed to start exam attempt');
+}
+
+export async function submitExamAttempt(
+	examId: string,
+	data: SubmitAttemptRequest
+): Promise<ExamAttempt> {
+	const response = await authenticatedFetch(`${BASE_URL}/exams/${examId}/submit`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	return readData<ExamAttempt>(response, 'Failed to submit exam attempt');
 }
 
 

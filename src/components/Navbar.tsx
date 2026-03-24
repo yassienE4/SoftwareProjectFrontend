@@ -56,6 +56,9 @@ export default function Navbar() {
             </Link>
             {user && (
               <>
+                <Link href="/exams" className="text-gray-700 hover:text-blue-600 transition">
+                  Exams
+                </Link>
                 {user.role === 'Admin' && (
                   <Link href="/admin/users" className="text-gray-700 hover:text-blue-600 transition">
                     Dashboard
@@ -79,6 +82,9 @@ export default function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/exams">Exams</Link>
+                  </DropdownMenuItem>
                   {user.role === 'Admin' && (
                     <DropdownMenuItem asChild>
                       <Link href="/admin/users">Dashboard</Link>
@@ -127,6 +133,9 @@ export default function Navbar() {
             </Link>
             {user ? (
               <>
+                <Link href="/exams" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                  Exams
+                </Link>
                 {user.role === 'Admin' && (
                   <Link href="/admin/users" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                     Dashboard
