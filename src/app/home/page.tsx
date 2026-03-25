@@ -2,14 +2,28 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAccessToken, getRefreshToken, refreshAccessToken } from '@/lib/api';
+import { getAccessToken, refreshAccessToken } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
+
+function decodeJwtPayload(token: string): Record<string, unknown> {
+  const payload = token.split('.')[1];
+
+  if (!payload) {
+    throw new Error('Invalid token');
+  }
+
+  const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedBase64 = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
+
+  return JSON.parse(atob(paddedBase64));
+}
 
 // Helper to decode JWT and check expiry
 function isTokenExpired(token: string | null): boolean {
   if (!token) return true;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = decodeJwtPayload(token) as { exp?: number };
+
     if (!payload.exp) return true;
     // exp is in seconds, Date.now() is ms
     return Date.now() >= payload.exp * 1000;
