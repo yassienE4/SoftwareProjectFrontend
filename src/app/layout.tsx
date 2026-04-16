@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SoftwareProject",
-  description: "Build, manage, and collaborate on software projects with ease",
+  title: {
+    default: "Exam System",
+    template: "%s | Exam System",
+  },
+  description: "A secure exam platform for managing courses, assessments, and results.",
 };
 
 export default function RootLayout({

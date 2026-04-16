@@ -1,121 +1,153 @@
-'use client';
-
 import Link from 'next/link';
+import { ArrowRight, BarChart3, CheckCircle2, FileText, ShieldCheck, Users2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Zap, Shield, Users } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+
+const highlights = [
+  {
+    icon: FileText,
+    title: 'Course-scoped exams',
+    description: 'Organize assessments by course so students only see what applies to them.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Controlled access',
+    description: 'Role-aware navigation keeps admins, instructors, and students in their lane.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Clear progress view',
+    description: 'Track attempts and review outcomes without jumping between tools.',
+  },
+];
+
+const steps = [
+  'Sign in or create an account.',
+  'Browse the exams available to your role.',
+  'Open an assessment and start working immediately.',
+];
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center space-y-8">
-          <h1 className="text-5xl sm:text-6xl font-bold text-gray-900">
-            Welcome to <span className="text-blue-600">SoftwareProject</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Build, manage, and collaborate on software projects with ease. 
-            Get started in minutes with our powerful platform.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button size="lg" asChild>
-              <Link href="/register" className="gap-2">
-                Get Started <ArrowRight size={20} />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/#features">Learn More</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+    <main className="relative overflow-hidden bg-background">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(37,99,235,0.12),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(15,23,42,0.06),_transparent_26%),linear-gradient(to_bottom,_rgba(248,250,252,1),_rgba(255,255,255,1))]" />
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col px-4 py-14 sm:px-6 lg:px-8">
+        <section className="grid flex-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="space-y-8">
+            <Badge variant="secondary" className="w-fit rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-blue-700">
+              Exam management made simple
+            </Badge>
 
-      {/* Features Section */}
-      <section id="features" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-gray-200">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
-          Powerful Features
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="p-6 bg-white rounded-lg border border-gray-200 hover:shadow-lg transition">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-              <Zap className="text-blue-600" size={24} />
+            <div className="space-y-5">
+              <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+                Run exams, manage courses, and review results in one place.
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+                Exam System gives students a focused workspace and gives instructors and admins the
+                controls they need to create, publish, and review assessments without extra noise.
+              </p>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Lightning Fast</h3>
-            <p className="text-gray-600">
-              Experience blazing-fast performance with our optimized infrastructure.
-            </p>
-          </div>
 
-          {/* Feature 2 */}
-          <div className="p-6 bg-white rounded-lg border border-gray-200 hover:shadow-lg transition">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-              <Shield className="text-green-600" size={24} />
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href="/register" className="gap-2">
+                  Create account
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/login">Sign in</Link>
+              </Button>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Secure</h3>
-            <p className="text-gray-600">
-              Enterprise-grade security to keep your projects and data safe.
-            </p>
-          </div>
 
-          {/* Feature 3 */}
-          <div className="p-6 bg-white rounded-lg border border-gray-200 hover:shadow-lg transition">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              <Users className="text-purple-600" size={24} />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Collaborative</h3>
-            <p className="text-gray-600">
-              Work together seamlessly with your team in real-time.
-            </p>
-          </div>
-        </div>
-      </section>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {highlights.map((item) => {
+                const Icon = item.icon;
 
-      {/* About Section */}
-      <section id="about" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-gray-200">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
-            <p className="text-lg text-gray-600 mb-4">
-              SoftwareProject is built by developers, for developers. We understand 
-              the challenges of managing complex projects and have created a platform 
-              that makes collaboration effortless.
-            </p>
-            <p className="text-lg text-gray-600">
-              Our mission is to empower teams to build great software faster and with 
-              better quality. Join thousands of developers already using SoftwareProject.
-            </p>
-          </div>
-          <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg h-80 flex items-center justify-center">
-            <div className="text-center text-white">
-              <h3 className="text-4xl font-bold mb-4">500+</h3>
-              <p className="text-xl">Teams Trust Us</p>
+                return (
+                  <Card key={item.title} className="border-border/60 bg-white/80 shadow-sm backdrop-blur">
+                    <CardContent className="space-y-3 p-5">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h2 className="font-semibold text-foreground">{item.title}</h2>
+                        <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-gray-200">
-        <div className="bg-blue-600 rounded-lg p-12 text-center text-white space-y-6">
-          <h2 className="text-4xl font-bold">Ready to get started?</h2>
-          <p className="text-xl text-blue-100">
-            Join the community of developers building amazing projects.
-          </p>
-          <Button size="lg" variant="secondary" asChild>
-            <Link href="/register">Create Your Account Now</Link>
+          <div className="relative">
+            <div className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl" />
+            <Card className="border-border/60 bg-white/90 shadow-xl shadow-slate-200/60">
+              <CardContent className="space-y-6 p-6 sm:p-8">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Live workspace</p>
+                    <h2 className="mt-1 text-2xl font-semibold text-foreground">Exam System</h2>
+                  </div>
+                  <div className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                    Ready
+                  </div>
+                </div>
+
+                <div className="space-y-3 rounded-2xl border border-border/60 bg-slate-50 p-5">
+                  {steps.map((step, index) => (
+                    <div key={step} className="flex items-start gap-3">
+                      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
+                        {index + 1}
+                      </div>
+                      <p className="pt-0.5 text-sm leading-6 text-slate-700">{step}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-border/60 p-4">
+                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <Users2 className="h-4 w-4 text-blue-600" />
+                      Roles supported
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      Student, instructor, and admin flows share the same interface patterns.
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-border/60 p-4">
+                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-blue-600" />
+                      Secure by default
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      Protected pages keep auth checks and redirects in place for signed-in users.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="mt-14 grid gap-4 rounded-3xl border border-border/60 bg-white/80 p-6 shadow-sm backdrop-blur sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-foreground">Built for exam workflows</h2>
+            <p className="text-muted-foreground">
+              Start with a simple landing page, then move into login, exams, courses, and user
+              management with the same clean UI language.
+            </p>
+          </div>
+          <Button size="lg" asChild>
+            <Link href="/exams" className="gap-2">
+              Go to exams
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </Button>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-gray-50 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center text-gray-600">
-            <p>&copy; 2026 SoftwareProject. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </section>
+      </div>
+    </main>
   );
 }

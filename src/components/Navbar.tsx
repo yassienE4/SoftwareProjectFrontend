@@ -53,9 +53,9 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">S</span>
+              <span className="text-white font-bold">E</span>
             </div>
-            <span className="font-bold text-lg hidden sm:inline">SoftwareProject</span>
+            <span className="font-bold text-lg hidden sm:inline">Exam System</span>
           </Link>
 
           {/* Desktop Navigation - Centered */}
