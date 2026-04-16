@@ -60,9 +60,14 @@ export default function Navbar() {
                   Exams
                 </Link>
                 {user.role === 'Admin' && (
-                  <Link href="/admin/users" className="text-gray-700 hover:text-blue-600 transition">
-                    Dashboard
-                  </Link>
+                    <>
+                      <Link href="/admin/users" className="text-gray-700 hover:text-blue-600 transition">
+                        Users
+                      </Link>
+                      <Link href="/admin/courses" className="text-gray-700 hover:text-blue-600 transition">
+                        Courses
+                      </Link>
+                    </>
                 )}
                 <Link href="/profile" className="text-gray-700 hover:text-blue-600 transition">
                   Profile
@@ -86,9 +91,14 @@ export default function Navbar() {
                     <Link href="/exams">Exams</Link>
                   </DropdownMenuItem>
                   {user.role === 'Admin' && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin/users">Dashboard</Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/users">Users</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/courses">Courses</Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuItem asChild>
                     <Link href="/profile">Profile</Link>
@@ -137,9 +147,14 @@ export default function Navbar() {
                   Exams
                 </Link>
                 {user.role === 'Admin' && (
-                  <Link href="/admin/users" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                    Dashboard
-                  </Link>
+                  <>
+                    <Link href="/admin/users" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                      Users
+                    </Link>
+                    <Link href="/admin/courses" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                      Courses
+                    </Link>
+                  </>
                 )}
                 <Link href="/profile" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                   Profile

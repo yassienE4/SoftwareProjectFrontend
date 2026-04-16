@@ -171,16 +171,16 @@ export default function EditUserDialog({
 										value={field.value}
 									>
 										<FormControl>
-											<SelectTrigger>
+											<SelectTrigger data-testid="edit-user-role-trigger">
 												<SelectValue placeholder="Select a role" />
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											<SelectItem value={UserRole.Student}>Student</SelectItem>
-											<SelectItem value={UserRole.Instructor}>
+											<SelectItem value={UserRole.Student} data-testid="edit-user-role-student">Student</SelectItem>
+											<SelectItem value={UserRole.Instructor} data-testid="edit-user-role-instructor">
 												Instructor
 											</SelectItem>
-											<SelectItem value={UserRole.Admin}>Admin</SelectItem>
+											<SelectItem value={UserRole.Admin} data-testid="edit-user-role-admin">Admin</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />

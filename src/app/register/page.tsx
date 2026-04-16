@@ -177,6 +177,7 @@ export default function RegisterPage() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
+                    data-testid="register-role-trigger"
                     variant="outline"
                     className="w-full justify-between"
                     disabled={isLoading}
@@ -186,13 +187,13 @@ export default function RegisterPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
-                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Student)}>
+                  <DropdownMenuItem data-testid="register-role-student" onClick={() => handleRoleChange(UserRole.Student)}>
                     {UserRole.Student}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Instructor)}>
+                  <DropdownMenuItem data-testid="register-role-instructor" onClick={() => handleRoleChange(UserRole.Instructor)}>
                     {UserRole.Instructor}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleRoleChange(UserRole.Admin)}>
+                  <DropdownMenuItem data-testid="register-role-admin" onClick={() => handleRoleChange(UserRole.Admin)}>
                     {UserRole.Admin}
                   </DropdownMenuItem>
                 </DropdownMenuContent>

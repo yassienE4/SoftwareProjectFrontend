@@ -225,13 +225,13 @@ export default function QuestionDialog({
 										<FormLabel>Type</FormLabel>
 										<Select onValueChange={handleTypeChange} value={field.value}>
 											<FormControl>
-												<SelectTrigger>
+												<SelectTrigger data-testid="question-type-trigger">
 													<SelectValue placeholder="Select type" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value={QuestionType.MCQ}>MCQ</SelectItem>
-												<SelectItem value={QuestionType.TrueFalse}>True/False</SelectItem>
+													<SelectItem value={QuestionType.MCQ} data-testid="question-type-mcq">MCQ</SelectItem>
+													<SelectItem value={QuestionType.TrueFalse} data-testid="question-type-truefalse">True/False</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -298,13 +298,13 @@ export default function QuestionDialog({
 										<FormLabel>Correct Answer</FormLabel>
 										<Select onValueChange={field.onChange} value={field.value} disabled={answerOptions.length === 0}>
 											<FormControl>
-												<SelectTrigger>
+														<SelectTrigger data-testid="question-correct-answer-trigger">
 													<SelectValue placeholder="Choose the correct answer" />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
 												{answerOptions.map((option) => (
-													<SelectItem key={option} value={option}>
+															<SelectItem key={option} value={option} data-testid={`question-correct-answer-${option.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase()}`}>
 														{option}
 													</SelectItem>
 												))}

@@ -41,11 +41,20 @@ export interface User {
 	updatedAt: string;
 }
 
+export interface Course {
+	id: string;
+	code: string;
+	name: string;
+	description: string | null;
+	enrolledUserIds?: string[];
+}
+
 export interface Exam {
 	id: string;
 	title: string;
 	description: string;
 	instructorId: string;
+	courseId: string;
 	durationMinutes: number;
 	availabilityStart: string | null;
 	availabilityEnd: string | null;
@@ -94,10 +103,22 @@ export interface UpdateUserRequest {
 	password?: string;
 }
 
+export interface CreateCourseRequest {
+	code: string;
+	name: string;
+	description?: string;
+}
+
+export interface EnrollUsersRequest {
+	userId?: string;
+	userIds?: string[];
+}
+
 export interface CreateExamRequest {
 	title: string;
 	description: string;
 	durationMinutes: number;
+	courseId: string;
 	availabilityStart?: string | null;
 	availabilityEnd?: string | null;
 	status?: ExamStatus;
@@ -108,6 +129,7 @@ export interface UpdateExamRequest {
 	title?: string;
 	description?: string;
 	durationMinutes?: number;
+	courseId?: string;
 	availabilityStart?: string | null;
 	availabilityEnd?: string | null;
 	status?: ExamStatus;
@@ -359,6 +381,50 @@ export async function authenticatedFetch(
 export async function getExams(): Promise<Exam[]> {
 	const response = await authenticatedFetch(`${BASE_URL}/exams`);
 	return readData<Exam[]>(response, 'Failed to fetch exams');
+}
+
+export async function getMyCourses(): Promise<Course[]> {
+	const response = await authenticatedFetch(`${BASE_URL}/courses/me`);
+	return readData<Course[]>(response, 'Failed to fetch courses');
+}
+
+export async function getCourses(): Promise<Course[]> {
+	const response = await authenticatedFetch(`${BASE_URL}/courses`);
+	return readData<Course[]>(response, 'Failed to fetch courses');
+}
+
+export async function createCourse(data: CreateCourseRequest): Promise<Course> {
+	const response = await authenticatedFetch(`${BASE_URL}/courses`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	return readData<Course>(response, 'Failed to create course');
+}
+
+export async function enrollUsersInCourse(courseId: string, data: EnrollUsersRequest): Promise<{ message: string }> {
+	const response = await authenticatedFetch(`${BASE_URL}/courses/${courseId}/enrollments`, {
+		method: 'POST',
+		body: JSON.stringify(data),
+	});
+
+	if (!response.ok) {
+		throw new Error(await readErrorMessage(response, 'Failed to enroll users in course'));
+	}
+
+	return response.json();
+}
+
+export async function removeUserFromCourse(courseId: string, userId: string): Promise<{ message: string }> {
+	const response = await authenticatedFetch(`${BASE_URL}/courses/${courseId}/enrollments/${userId}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) {
+		throw new Error(await readErrorMessage(response, 'Failed to remove user from course'));
+	}
+
+	return response.json();
 }
 
 export async function getExamById(id: string): Promise<Exam> {

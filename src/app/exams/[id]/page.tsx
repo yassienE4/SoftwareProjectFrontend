@@ -69,6 +69,17 @@ function getAttemptStorageKey(examId: string, userId: string | null): string {
 	return `exam-attempt:${examId}:${userId ?? 'anonymous'}`;
 }
 
+function isAccessDeniedError(error: unknown): boolean {
+	const message = error instanceof Error ? error.message : String(error);
+	const normalizedMessage = message.toLowerCase();
+	return (
+		normalizedMessage.includes('access denied') ||
+		normalizedMessage.includes('forbidden') ||
+		normalizedMessage.includes('not enrolled') ||
+		normalizedMessage.includes('403')
+	);
+}
+
 export default function ExamDetailPage() {
 	return (
 		<ProtectedRoute>
@@ -86,6 +97,7 @@ function ExamDetailContent() {
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [accessDenied, setAccessDenied] = useState(false);
 	const [editExamOpen, setEditExamOpen] = useState(false);
 	const [deleteExamOpen, setDeleteExamOpen] = useState(false);
 	const [questionDialogOpen, setQuestionDialogOpen] = useState(false);
@@ -126,13 +138,18 @@ function ExamDetailContent() {
 			try {
 				setLoading(true);
 				setError(null);
-				const [examData, questionData] = await Promise.all([
-					getExamById(examId),
-					getExamQuestions(examId),
-				]);
+				setAccessDenied(false);
+				const examData = await getExamById(examId);
 				setExam(examData);
+				const questionData = await getExamQuestions(examId);
 				setQuestions(questionData.sort((left, right) => left.order - right.order));
 			} catch (loadError) {
+				if (isAccessDeniedError(loadError)) {
+					setAccessDenied(true);
+					setQuestions([]);
+					return;
+				}
+
 				const message = loadError instanceof Error ? loadError.message : 'Failed to load exam';
 				setError(message);
 				toast.error(message);
@@ -203,6 +220,12 @@ function ExamDetailContent() {
 			setAttemptScore(attempt.score);
 			toast.success('Exam attempt started');
 		} catch (startError) {
+			if (isAccessDeniedError(startError)) {
+				setAccessDenied(true);
+				toast.error('You are not enrolled in this course');
+				return;
+			}
+
 			const message = startError instanceof Error ? startError.message : 'Failed to start exam';
 			if (message.toLowerCase().includes('attempt')) {
 				setAttemptStarted(true);
@@ -252,6 +275,29 @@ function ExamDetailContent() {
 				<Skeleton className="h-8 w-40" />
 				<Skeleton className="h-48 w-full" />
 				<Skeleton className="h-80 w-full" />
+			</div>
+		);
+	}
+
+	if (accessDenied) {
+		return (
+			<div className="container mx-auto py-10 px-4">
+				<Card>
+					<CardHeader>
+						<CardTitle className="text-destructive">Access denied</CardTitle>
+						<CardDescription>
+							{exam
+								? `You are not enrolled in the course for "${exam.title}".`
+								: 'You are not enrolled in the course for this exam.'}
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<Button variant="outline" onClick={() => router.push('/exams')}>
+							<ArrowLeft className="mr-2 h-4 w-4" />
+							Back to exams
+						</Button>
+					</CardContent>
+				</Card>
 			</div>
 		);
 	}
@@ -311,11 +357,15 @@ function ExamDetailContent() {
 					<CardTitle>Exam Details</CardTitle>
 					<CardDescription>Timing, visibility, and scoring setup.</CardDescription>
 				</CardHeader>
-				<CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+				<CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
 					<div>
 						<p className="text-sm text-muted-foreground">Duration</p>
 						<p className="font-medium">{exam.durationMinutes} minutes</p>
 					</div>
+						<div>
+							<p className="text-sm text-muted-foreground">Course</p>
+							<p className="font-medium">{exam.courseId}</p>
+						</div>
 					<div>
 						<p className="text-sm text-muted-foreground">Availability Start</p>
 						<p className="font-medium">{formatAvailability(exam.availabilityStart)}</p>

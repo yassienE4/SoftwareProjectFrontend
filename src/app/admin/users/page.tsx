@@ -125,14 +125,14 @@ function UsersPageContent() {
 				<div className="flex items-center gap-4">
 					<label className="text-sm font-medium">Filter by role:</label>
 					<Select value={roleFilter} onValueChange={handleRoleFilterChange}>
-						<SelectTrigger className="w-[180px]">
+						<SelectTrigger className="w-[180px]" data-testid="user-role-filter-trigger">
 							<SelectValue placeholder="All roles" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="all">All roles</SelectItem>
-							<SelectItem value={UserRole.Admin}>Admin</SelectItem>
-							<SelectItem value={UserRole.Instructor}>Instructor</SelectItem>
-							<SelectItem value={UserRole.Student}>Student</SelectItem>
+							<SelectItem value="all" data-testid="user-role-filter-all">All roles</SelectItem>
+							<SelectItem value={UserRole.Admin} data-testid="user-role-filter-admin">Admin</SelectItem>
+							<SelectItem value={UserRole.Instructor} data-testid="user-role-filter-instructor">Instructor</SelectItem>
+							<SelectItem value={UserRole.Student} data-testid="user-role-filter-student">Student</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>

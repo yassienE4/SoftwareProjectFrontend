@@ -151,22 +151,22 @@ function ExamsPageContent() {
 						<CardTitle>Exam Library</CardTitle>
 						<CardDescription>
 							{currentUser?.role === UserRole.Student
-								? 'Published exams available to you'
-								: 'All exams visible to your role'}
+								? 'Published exams for courses you are enrolled in'
+								: 'Exams visible to your role and course access'}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<div className="flex items-center gap-4">
 							<label className="text-sm font-medium">Filter by status:</label>
 							<Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as ExamStatus | 'all')}>
-								<SelectTrigger className="w-[200px]">
+								<SelectTrigger className="w-[200px]" data-testid="exam-status-filter-trigger">
 									<SelectValue placeholder="All statuses" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="all">All statuses</SelectItem>
-									<SelectItem value={ExamStatus.Draft}>Draft</SelectItem>
-									<SelectItem value={ExamStatus.Published}>Published</SelectItem>
-									<SelectItem value={ExamStatus.Closed}>Closed</SelectItem>
+									<SelectItem value="all" data-testid="exam-status-filter-all">All statuses</SelectItem>
+									<SelectItem value={ExamStatus.Draft} data-testid="exam-status-filter-draft">Draft</SelectItem>
+									<SelectItem value={ExamStatus.Published} data-testid="exam-status-filter-published">Published</SelectItem>
+									<SelectItem value={ExamStatus.Closed} data-testid="exam-status-filter-closed">Closed</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -176,6 +176,7 @@ function ExamsPageContent() {
 								<TableHeader>
 									<TableRow>
 										<TableHead>Title</TableHead>
+										<TableHead>Course</TableHead>
 										<TableHead>Status</TableHead>
 										<TableHead>Duration</TableHead>
 										<TableHead>Availability</TableHead>
@@ -195,7 +196,7 @@ function ExamsPageContent() {
 										))
 									) : visibleExams.length === 0 ? (
 										<TableRow>
-											<TableCell colSpan={5} className="py-12 text-center text-muted-foreground">
+											<TableCell colSpan={6} className="py-12 text-center text-muted-foreground">
 												No exams found
 											</TableCell>
 										</TableRow>
@@ -212,6 +213,9 @@ function ExamsPageContent() {
 															<p className="text-sm text-muted-foreground line-clamp-1">{exam.description}</p>
 														</div>
 													</div>
+												</TableCell>
+												<TableCell>
+													<p className="text-sm text-muted-foreground">Course ID: {exam.courseId}</p>
 												</TableCell>
 												<TableCell>
 													<Badge variant={getStatusVariant(exam.status)}>{exam.status}</Badge>
