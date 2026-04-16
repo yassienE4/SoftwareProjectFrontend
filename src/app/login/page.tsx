@@ -46,7 +46,7 @@ export default function LoginPage() {
         localStorage.setItem('user', JSON.stringify(response.data));
 
         // Redirect based on role
-        const redirectUrl = response.data.role === 'Admin' ? '/admin/users' : '/home';
+        const redirectUrl = response.data.role === 'Admin' ? '/admin/users' : '/exams';
         setTimeout(() => {
           window.location.href = redirectUrl;
         }, 500);

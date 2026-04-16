@@ -21,6 +21,7 @@ interface UserData {
 
 export default function Navbar() {
   const [user, setUser] = useState<UserData | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -29,7 +30,15 @@ export default function Navbar() {
     if (userData) {
       setUser(JSON.parse(userData));
     }
+
+    setIsChecked(true);
   }, []);
+
+  if (!isChecked || !user) {
+    if (!isChecked) {
+      return null;
+    }
+  }
 
   const handleLogout = () => {
     logout();
@@ -50,11 +59,11 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation - Centered */}
-          <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
-            <Link href="/" className="text-gray-700 hover:text-blue-600 transition">
-              Home
-            </Link>
-            {user && (
+          {user && (
+            <div className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+              <Link href="/" className="text-gray-700 hover:text-blue-600 transition">
+                Home
+              </Link>
               <>
                 <Link href="/exams" className="text-gray-700 hover:text-blue-600 transition">
                   Exams
@@ -73,8 +82,8 @@ export default function Navbar() {
                   Profile
                 </Link>
               </>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Auth Buttons / User Menu - Fixed right */}
           <div className="flex-shrink-0 flex justify-end">
@@ -138,11 +147,11 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 bg-white">
           <div className="px-4 pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              Home
-            </Link>
             {user ? (
               <>
+                <Link href="/" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                  Home
+                </Link>
                 <Link href="/exams" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                   Exams
                 </Link>
