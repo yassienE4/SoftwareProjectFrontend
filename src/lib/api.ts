@@ -63,6 +63,15 @@ export interface Exam {
 	updatedAt: string;
 }
 
+export interface ExamAnalytics {
+  examId: number;
+  totalAttempts: number;
+  averageScore: number;
+  highestScore: number;
+  lowestScore: number;
+  passRate: number;
+}
+
 export interface Question {
 	id: string;
 	examId: string;
@@ -430,6 +439,22 @@ export async function removeUserFromCourse(courseId: string, userId: string): Pr
 export async function getExamById(id: string): Promise<Exam> {
 	const response = await authenticatedFetch(`${BASE_URL}/exams/${id}`);
 	return readData<Exam>(response, 'Failed to fetch exam');
+}
+
+export async function getExamAnalytics(
+  examId: number
+): Promise<ExamAnalytics> {
+  const response = await authenticatedFetch(
+    `${BASE_URL}/exams/${examId}/analytics`
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to fetch analytics");
+  }
+
+  return result.data;
 }
 
 export async function createExam(data: CreateExamRequest): Promise<Exam> {

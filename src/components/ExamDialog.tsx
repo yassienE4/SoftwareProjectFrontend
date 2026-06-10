@@ -96,6 +96,10 @@ export default function ExamDialog({
 	});
 
 	useEffect(() => {
+  console.log("FORM ERRORS:", form.formState.errors);
+}, [form.formState.errors]); 
+
+	useEffect(() => {
 		if (!open) return;
 		setIsSubmitting(false);
 
@@ -105,7 +109,7 @@ export default function ExamDialog({
 					title: exam.title,
 					description: exam.description,
 					durationMinutes: exam.durationMinutes,
-					courseId: exam.courseId,
+					courseId: String(exam.courseId),
 					availabilityStart: toLocalDateTime(exam.availabilityStart),
 					availabilityEnd: toLocalDateTime(exam.availabilityEnd),
 					status: exam.status,

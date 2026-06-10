@@ -339,17 +339,27 @@ function ExamDetailContent() {
 					<p className="text-muted-foreground max-w-3xl">{exam.description}</p>
 				</div>
 				{canManage && (
-					<div className="flex flex-wrap gap-2">
-						<Button variant="outline" onClick={() => setEditExamOpen(true)}>
-							<Pencil className="mr-2 h-4 w-4" />
-							Edit Exam
-						</Button>
-						<Button variant="destructive" onClick={() => setDeleteExamOpen(true)}>
-							<Trash2 className="mr-2 h-4 w-4" />
-							Delete Exam
-						</Button>
-					</div>
-				)}
+	<div className="flex flex-wrap gap-2">
+
+		<Button
+			variant="secondary"
+			onClick={() => router.push(`/exams/${exam.id}/analytics`)}
+		>
+			View Analytics
+		</Button>
+
+		<Button variant="outline" onClick={() => setEditExamOpen(true)}>
+			<Pencil className="mr-2 h-4 w-4" />
+			Edit Exam
+		</Button>
+
+		<Button variant="destructive" onClick={() => setDeleteExamOpen(true)}>
+			<Trash2 className="mr-2 h-4 w-4" />
+			Delete Exam
+		</Button>
+
+	</div>
+)}
 			</div>
 
 			<Card>
